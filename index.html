@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Presentes</title>
+<meta name="theme-color" content="#6d28d9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Presentes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2fa;--surface:#ffffff;--ink:#231a33;--muted:#6b6380;--line:#e6dff0;
+  --accent:#6d28d9;--on-accent:#ffffff;--accent-soft:#efe7fd;--accent-ink:#4c1d95;
+  --ok:#157a55;--ok-soft:#e2f5ec;--wait-soft:#fff3d6;--wait-ink:#7a5200;
+  --danger:#a32929;--danger-soft:#fdeeee;--shadow:0 1px 2px rgba(35,26,51,.06);
+  --display:"Bricolage Grotesque",ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#15111d;--surface:#1f1a2a;--ink:#ece6f6;--muted:#a79fb8;--line:#332b42;
+    --accent:#a78bfa;--on-accent:#1a1030;--accent-soft:#2c2340;--accent-ink:#d8c9ff;
+    --ok:#5fd3a0;--ok-soft:#17352a;--wait-soft:#3a2e12;--wait-ink:#f3cf7a;
+    --danger:#ff9b9b;--danger-soft:#3a1c1f;--shadow:none;
+    color-scheme:dark;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--body);-webkit-text-size-adjust:100%;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+img{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+.hidden{display:none!important}
+
+/* Cabeçalhos */
+header{padding:18px 0 8px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:40px}
+h1{font:800 clamp(32px,9vw,46px)/1.05 var(--display);letter-spacing:-.02em;margin:6px 0 0;overflow-wrap:anywhere}
+.sub{color:var(--muted);font-size:14px;margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 12px;font-size:14px;cursor:pointer;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.link{border:0;background:none;color:var(--accent);font-weight:600;padding:6px 0;cursor:pointer;font-size:15px}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:12px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;font-size:20px;line-height:1}
+
+/* Botões */
+.btn{border:0;border-radius:11px;padding:10px 14px;font-weight:600;font-size:14px;cursor:pointer;background:var(--accent-soft);color:var(--accent-ink)}
+.btn.primary{background:var(--accent);color:var(--on-accent)}
+.btn.danger{background:var(--danger-soft);color:var(--danger)}
+.btn.ghost{background:none;color:var(--muted)}
+.btn.wide{width:100%;padding:13px}
+.btn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.btn:disabled{opacity:.5;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+
+/* Entrada */
+.auth{min-height:calc(100vh - 40px);display:flex;flex-direction:column;justify-content:center;max-width:420px;margin:0 auto;padding:24px 16px}
+.auth h1{font-size:52px}
+.auth p{color:var(--muted);margin:8px 0 26px}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;margin:18px 0 6px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
+input[type=text],input[type=email],input[type=password],input[type=url],select{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px;background:var(--surface)}
+dialog input[type=text],dialog input[type=email],dialog input[type=url],dialog select{background:var(--bg)}
+.err{color:var(--danger);font-size:13px;min-height:1.2em;margin-top:8px}
+.hint{color:var(--muted);font-size:13px;margin-top:6px}
+
+/* Listas (início) */
+.lists{display:flex;flex-direction:column;gap:10px;margin:18px 0 120px}
+.listcard{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;box-shadow:var(--shadow)}
+.listcard .ic{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;font-size:22px;flex:none}
+.listcard b{display:block;font:700 19px/1.2 var(--display)}
+.listcard small{color:var(--muted)}
+.install{background:var(--accent-soft);color:var(--accent-ink);border-radius:14px;padding:12px 14px;margin-top:14px;font-size:14px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+
+/* Fita do orçamento */
+.ribbon{margin:18px 0 6px}
+.bar{position:relative;height:14px;border-radius:999px;background:var(--accent-soft);overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--accent);border-radius:999px;transition:width .5s ease}
+.figures{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.figures div{min-width:0}
+.figures small{display:block;color:var(--muted);font-size:13px}
+.figures b{font:700 19px/1.2 var(--display);font-variant-numeric:tabular-nums}
+.figures div:nth-child(2){text-align:center}
+.figures div:nth-child(3){text-align:right}
+.scope{color:var(--muted);font-size:13px;margin-top:2px;min-height:1em}
+
+/* Filtros */
+.filters{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:10px 0}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg{display:flex;margin-top:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:7px 4px;font-size:14px;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:600}
+.note{font-size:14px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:10px 0}
+.note b{color:var(--ink)}
+
+/* Presentes */
+#gifts{padding-bottom:120px}
+.group{margin:22px 0 0}
+.group h2{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font:700 22px/1.2 var(--display);margin:0 0 8px}
+.group h2 small{font:400 13px var(--body);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.gift{background:var(--surface);border:1px solid var(--line);border-radius:16px;margin:8px 0;box-shadow:var(--shadow);overflow:hidden}
+.gift.done{opacity:.78}
+.gift>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;min-height:60px}
+.gift>summary::-webkit-details-marker{display:none}
+.thumb{width:44px;height:44px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;font-size:20px;flex:none;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.sumtext{flex:1;min-width:0}
+.gname{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gift.done .gname{text-decoration:line-through;text-decoration-color:var(--muted)}
+.gmeta{display:flex;gap:10px;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.badge{flex:none;font-size:12px;padding:4px 9px;border-radius:999px;background:var(--wait-soft);color:var(--wait-ink)}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.body{border-top:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:10px}
+.photo{width:100%;max-height:280px;object-fit:cover;border-radius:12px;background:var(--accent-soft);display:block}
+.photo.ph{height:120px;display:grid;place-items:center;color:var(--muted);font-size:13px}
+.detail{font-size:14px;color:var(--muted)}
+.detail b{color:var(--ink);font-weight:600}
+.detail a{color:var(--accent);font-weight:600}
+.state{text-align:center;color:var(--muted);padding:40px 12px}
+.state h3{font:700 20px var(--display);color:var(--ink);margin:0 0 6px}
+.gate{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin:16px 0}
+.gate h3{font:700 22px/1.2 var(--display);margin:0 0 6px}
+.gate p{margin:0 0 12px;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+
+/* Botão fixo em baixo */
+.dock{position:fixed;left:0;right:0;bottom:0;padding:0 16px calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none;z-index:8}
+.dock .btn{pointer-events:auto;padding:14px 22px;font-size:16px;border-radius:999px;box-shadow:0 6px 20px rgba(76,29,149,.28)}
+
+/* Diálogos */
+dialog{border:0;border-radius:20px;padding:0;width:min(560px,calc(100% - 24px));background:var(--surface);color:var(--ink);max-height:calc(100% - 32px)}
+dialog::backdrop{background:rgba(20,12,32,.5)}
+.dlg{padding:20px}
+.dlg h3{font:700 22px/1.2 var(--display);margin:0 0 10px}
+.dlg p{margin:0 0 10px;color:var(--muted)}
+.dlg>.actions{justify-content:flex-end;margin-top:16px}
+.grid{display:grid;grid-template-columns:1fr;gap:0 12px}
+@media (min-width:560px){.grid{grid-template-columns:1fr 1fr}.grid .full{grid-column:1/-1}}
+.preview{display:flex;align-items:center;gap:10px;margin-top:8px}
+.preview img{width:56px;height:56px;object-fit:cover;border-radius:10px}
+.menu{display:flex;flex-direction:column;gap:6px}
+.menu .btn{text-align:left;padding:13px 14px;font-size:15px}
+.rows{display:flex;flex-direction:column;gap:8px;margin:8px 0 14px}
+.row{display:flex;align-items:center;gap:10px;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.row span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.row small{color:var(--muted);display:block}
+.row select{width:auto;max-width:50%;padding:7px}
+h4{margin:14px 0 4px;font:700 16px var(--display)}
+
+footer{color:var(--muted);font-size:13px;text-align:center;padding:10px 0 30px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;z-index:20;max-width:calc(100% - 32px);opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.bar i,.toast{transition:none}}
+</style>
+</head>
+<body>
+
+<!-- Configuração em falta -->
+<section id="setupView" class="auth hidden">
+  <h1>Presentes</h1>
+  <p>Falta ligar a app ao Firebase. Abre o ficheiro <b>firebase-config.js</b> e cola lá a configuração do teu projeto, como explica o LEIA-ME.</p>
+</section>
+
+<!-- A carregar -->
+<section id="bootView" class="auth"><h1>Presentes</h1><p>A abrir…</p></section>
+
+<!-- Entrar -->
+<section id="authView" class="auth hidden">
+  <h1>Presentes</h1>
+  <p>Listas de presentes para a família: ideias, votos e compras, sem estragar surpresas.</p>
+  <button class="btn primary wide" type="button" data-action="google">Entrar com Google</button>
+  <div class="or">ou com email</div>
+  <form id="emailForm" novalidate>
+    <div id="signupName" class="hidden"><label for="aName">O teu nome</label><input id="aName" type="text" autocomplete="name"></div>
+    <label for="aEmail">Email</label><input id="aEmail" type="email" autocomplete="email" inputmode="email">
+    <label for="aPass">Palavra-passe</label><input id="aPass" type="password" autocomplete="current-password">
+    <div class="err" id="authErr"></div>
+    <button class="btn primary wide" type="submit" id="authSubmit">Entrar</button>
+  </form>
+  <div class="actions" style="justify-content:space-between;margin-top:10px">
+    <button class="link" type="button" data-action="toggleSignup" id="toggleSignup">Criar conta</button>
+    <button class="link" type="button" data-action="resetPass">Esqueci-me da palavra-passe</button>
+  </div>
+</section>
+
+<!-- Início: as minhas listas -->
+<section id="homeView" class="hidden">
+  <div class="wrap">
+    <header>
+      <div class="top"><span></span><button class="pill" type="button" data-action="account" id="accountBtn">Conta</button></div>
+      <h1>As tuas listas</h1>
+    </header>
+    <div id="installBox"></div>
+    <div class="lists" id="lists"></div>
+  </div>
+  <div class="dock"><button class="btn primary" type="button" data-action="newList">＋ Nova lista</button></div>
+</section>
+
+<!-- Uma lista -->
+<section id="listView" class="hidden">
+  <div class="wrap">
+    <header>
+      <div class="top">
+        <button class="link" type="button" data-action="home">‹ Listas</button>
+        <button class="iconbtn" type="button" data-action="listMenu" aria-label="Opções da lista">⋯</button>
+      </div>
+      <h1 id="listName"></h1>
+      <div class="sub"><span id="membersLine"></span><button class="pill hidden" type="button" data-action="identity" id="whoBtn"></button></div>
+      <div class="ribbon" aria-label="Orçamento">
+        <div class="bar"><i id="barFill"></i></div>
+        <div class="figures">
+          <div><small>Já comprado</small><b id="fBought"></b></div>
+          <div><small>Por comprar</small><b id="fLeft"></b></div>
+          <div><small>Previsto</small><b id="fTotal"></b></div>
+        </div>
+        <div class="scope" id="scope"></div>
+      </div>
+    </header>
+    <div class="filters">
+      <div class="chips" id="chips" role="group" aria-label="Destinatário"></div>
+      <div class="seg" role="group" aria-label="Estado">
+        <button type="button" data-status="all" aria-pressed="true">Todos</button>
+        <button type="button" data-status="pending" aria-pressed="false">Por comprar</button>
+        <button type="button" data-status="done" aria-pressed="false">Comprados</button>
+      </div>
+    </div>
+    <div id="notes"></div>
+    <div id="gifts"></div>
+  </div>
+  <div class="dock" id="giftDock"><button class="btn primary" type="button" data-action="newGift">＋ Nova sugestão</button></div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Nome -->
+<dialog id="nameDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3>Como te chamas?</h3>
+    <p>É o nome que a família vê quando sugeres ou compras um presente.</p>
+    <input id="fMyName" type="text" autocomplete="name">
+    <div class="err" id="nameErr"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close" id="nameCancel">Cancelar</button><button class="btn primary" type="button" data-action="saveName">Guardar</button></div>
+  </form>
+</dialog>
+
+<!-- Conta -->
+<dialog id="accountDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3 id="accountTitle">Conta</h3>
+    <p id="accountEmail"></p>
+    <div class="menu">
+      <button class="btn" type="button" data-action="editName">Mudar o meu nome</button>
+      <button class="btn danger" type="button" data-action="signOut">Sair da conta</button>
+    </div>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close">Fechar</button></div>
+  </form>
+</dialog>
+
+<!-- Nova lista / mudar nome -->
+<dialog id="listNameDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3 id="listNameTitle">Nova lista</h3>
+    <label for="fListName">Nome da lista</label>
+    <input id="fListName" type="text" placeholder="Ex.: Natal 2026">
+    <div class="err" id="listNameErr"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close">Cancelar</button><button class="btn primary" type="button" data-action="saveListName" id="listNameSave">Criar lista</button></div>
+  </form>
+</dialog>
+
+<!-- Menu da lista -->
+<dialog id="menuDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3>Opções da lista</h3>
+    <div class="menu" id="menuItems"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close">Fechar</button></div>
+  </form>
+</dialog>
+
+<!-- Convidar -->
+<dialog id="inviteDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3>Convidar para a lista</h3>
+    <p>Envia este link a quem quiseres. Cada pessoa entra com a sua conta Google ou com email.</p>
+    <input id="fInvite" type="text" readonly>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn primary" type="button" data-action="shareInvite" id="shareInviteBtn">Partilhar</button>
+      <button class="btn" type="button" data-action="copyInvite">Copiar link</button>
+      <button class="btn ghost hidden" type="button" data-action="newInvite" id="newInviteBtn">Criar link novo</button>
+    </div>
+    <p class="hint" id="newInviteHint">Criar um link novo desativa o anterior.</p>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close">Fechar</button></div>
+  </form>
+</dialog>
+
+<!-- Pessoas -->
+<dialog id="peopleDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3>Pessoas</h3>
+    <h4>Membros</h4>
+    <div class="rows" id="memberRows"></div>
+    <h4>Destinatários</h4>
+    <p class="hint">Liga cada destinatário à conta da pessoa, para as sugestões dela lhe ficarem escondidas.</p>
+    <div class="rows" id="recipientRows"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close">Fechar</button></div>
+  </form>
+</dialog>
+
+<!-- Entrar numa lista -->
+<dialog id="joinDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3 id="joinTitle">Entrar na lista?</h3>
+    <p>Foste convidado para esta lista de presentes.</p>
+    <div class="err" id="joinErr"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close">Agora não</button><button class="btn primary" type="button" data-action="confirmJoin">Entrar na lista</button></div>
+  </form>
+</dialog>
+
+<!-- Sugestão -->
+<dialog id="giftDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3 id="giftTitle">Nova sugestão</h3>
+    <div class="grid">
+      <div><label for="fRecipient">Para quem *</label><input id="fRecipient" type="text" list="recipientList" autocomplete="off" placeholder="Ex.: Ana"></div>
+      <div><label for="fName">Presente</label><input id="fName" type="text" placeholder="Ainda por decidir"></div>
+      <div class="full hidden" id="linkField">
+        <label for="fLink">Esta pessoa tem conta na lista?</label>
+        <select id="fLink"></select>
+        <div class="hint">Se tiver, a sugestão fica escondida dela.</div>
+      </div>
+      <div><label for="fPrice">Preço previsto (€)</label><input id="fPrice" type="text" inputmode="decimal" placeholder="60"></div>
+      <div><label for="fUrl">Link da loja</label><input id="fUrl" type="url" placeholder="https://…"></div>
+      <div class="full"><label for="fNote">Nota</label><input id="fNote" type="text" placeholder="Cor, tamanho, modelo…"></div>
+      <div class="full">
+        <label for="fPhoto">Fotografia</label>
+        <input id="fPhoto" type="file" accept="image/*">
+        <div class="preview hidden" id="photoPreview"><img alt=""><button type="button" class="btn ghost" data-action="removePhoto">Remover fotografia</button></div>
+      </div>
+    </div>
+    <datalist id="recipientList"></datalist>
+    <div class="hint hidden" id="selfHint">Esta sugestão é para ti. Depois de a guardares, deixas de a ver.</div>
+    <div class="err" id="giftErr"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close">Cancelar</button><button class="btn primary" type="button" data-action="saveGift" id="saveGiftBtn">Adicionar</button></div>
+  </form>
+</dialog>
+
+<!-- Comprado -->
+<dialog id="buyDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3>Quanto custou?</h3>
+    <label for="fActual">Preço final pago (€)</label>
+    <input id="fActual" type="text" inputmode="decimal">
+    <div class="err" id="buyErr"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-action="close">Cancelar</button><button class="btn primary" type="button" data-action="confirmBuy">Marcar como comprado</button></div>
+  </form>
+</dialog>
+
+<!-- Confirmação -->
+<dialog id="confirmDlg">
+  <form class="dlg" method="dialog" novalidate>
+    <h3 id="confirmTitle"></h3>
+    <p id="confirmText"></p>
+    <div class="actions"><button class="btn ghost" type="button" data-action="confirmNo">Cancelar</button><button class="btn primary" type="button" data-action="confirmYes" id="confirmYes">Confirmar</button></div>
+  </form>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
