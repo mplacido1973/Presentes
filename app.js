@@ -311,6 +311,7 @@ function giftHtml(g) {
     ${g.hasPhoto ? (safeImg(photo) ? `<img class="photo" src="${esc(photo)}" alt="${esc(name)}">` : `<div class="photo ph">${photo === false ? "Fotografia indisponível" : "A carregar fotografia…"}</div>`) : ""}
     <div class="detail">Preço previsto: <b>${euro(g.price)}</b>${g.done && g.actual != null ? `<br>Preço pago: <b>${euro(g.actual)}</b>` : ""}</div>
     ${g.note ? `<div class="detail">${esc(g.note)}</div>` : ""}
+    ${g.store ? `<div class="detail">Loja: <b>${esc(g.store)}</b></div>` : ""}
     ${url ? `<div class="detail"><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">Ver na loja ↗</a></div>` : ""}
     ${g.createdBy ? `<div class="detail">Sugerido por ${esc(memberName(g.createdBy))}</div>` : ""}
     ${g.done && g.boughtBy ? `<div class="detail">Comprado por ${esc(memberName(g.boughtBy))}</div>` : ""}
@@ -397,7 +398,7 @@ function openGift(g) {
   $("#fRecipient").value = fr ? fr.name : "";
   $("#fName").value = g ? g.name || "" : "";
   $("#fPrice").value = g && g.price ? String(g.price).replace(".", ",") : "";
-  $("#fUrl").value = g ? g.url || "" : "";
+  $("#fStore").value = g ? g.store || "" : "";
   $("#fNote").value = g ? g.note || "" : "";
   $("#fPhoto").value = ""; $("#fLink").value = "";
   showPreview(g && g.hasPhoto ? safeImg(g.thumb) || "" : "");
@@ -425,10 +426,9 @@ $("#fPhoto").addEventListener("change", async e => {
 
 async function saveGift() {
   const recName = $("#fRecipient").value.trim().slice(0, 60);
-  const price = parseMoney($("#fPrice").value), rawUrl = $("#fUrl").value.trim();
+  const price = parseMoney($("#fPrice").value), store = $("#fStore").value.trim().slice(0, 80);
   if (!recName) return $("#giftErr").textContent = "Indica para quem é o presente.";
   if (Number.isNaN(price)) return $("#giftErr").textContent = "O preço tem de ser um número, por exemplo 59,90.";
-  if (rawUrl && !safeUrl(rawUrl)) return $("#giftErr").textContent = "O link tem de começar por https://";
   const btn = $("#saveGiftBtn"); btn.disabled = true; $("#giftErr").textContent = "";
   try {
     // 1. Destinatário (cria-o se ainda não existir).
@@ -440,7 +440,7 @@ async function saveGift() {
       rec = { id: ref.id, uid: linkUid };
     }
     const rid = rec.id;
-    const base = { name: $("#fName").value.trim().slice(0, 120), price: price || 0, url: rawUrl ? safeUrl(rawUrl) : "", note: $("#fNote").value.trim().slice(0, 500) };
+    const base = { name: $("#fName").value.trim().slice(0, 120), price: price || 0, store, note: $("#fNote").value.trim().slice(0, 500) };
     const ph = S.photo.data ? { hasPhoto: true, thumb: S.photo.thumb } : S.photo.removed ? { hasPhoto: false, thumb: null } : {};
     const batch = writeBatch(db);
 

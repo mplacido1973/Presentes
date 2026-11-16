@@ -1,6 +1,6 @@
 // Service worker: guarda a app para abrir depressa e sem rede.
 // Os dados das listas ficam a cargo do Firestore (que também funciona offline).
-const VERSION = "presentes-v2";
+const VERSION = "presentes-v3";
 const SHELL = ["./", "./index.html", "./app.js", "./firebase-config.js", "./manifest.webmanifest",
   "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
